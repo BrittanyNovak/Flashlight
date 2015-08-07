@@ -1,17 +1,44 @@
 package com.example.student.flashlight;
 
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ToggleButton;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    private Camera cam;
+    private boolean isFlashOn;
+    private boolean hasFlash;
+    Camera.Parameters camParm;
+    ToggleButton tbFlashlight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        hasFlash = getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        if(hasFlash){
+            getCamera();
+        }
+    }
+
+    private void getCamera() {
+        if (cam == null) {
+            try {
+                cam = Camera.open();
+                camParm = cam.getParameters();
+
+            } catch (RuntimeException t) {
+                t.printStackTrace();
+            }
+        }
     }
 
     @Override
